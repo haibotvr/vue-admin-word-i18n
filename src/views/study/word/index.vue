@@ -33,9 +33,9 @@
 
           <div class="number"><span>{{ nowPosition + 1 }}</span>/{{ totalNum }}</div>
           <!-- <div class="picture"><img src="../../../assets/study/orange.png" /></div> -->
-          <h1 v-show="dialogTip" align="center">{{ answer }}</h1>
+          <h3 v-show="dialogTip" align="center">{{ answer }}</h3>
           <div class="sound">
-            <h2 v-for="obj in wordCh" :key="obj.key" align="center">{{ obj.pos }}.  {{ obj.meaning }}</h2>
+            <h3 v-for="obj in wordCh" :key="obj.key" align="center">{{ obj.pos }}.  {{ obj.meaning }}</h3>
           </div>
           <div class="sound">
             <label>{{ phoneticSymbol }}</label>
@@ -53,7 +53,7 @@
       </el-col>
       <!-- <el-col v-show="dialogTip" :span="24">
         <div class="grid-content bg-purple">
-          <h2 v-for="obj in wordCh" :key="obj.key" align="center">{{ obj.pos }}.  {{ obj.meaning }}</h2>
+          <h3 v-for="obj in wordCh" :key="obj.key" align="center">{{ obj.pos }}.  {{ obj.meaning }}</h3>
         </div>
       </el-col> -->
       <el-col v-show="dialogRight" :span="24">
@@ -61,10 +61,10 @@
           <div class="number"><span>{{ nowPosition + 1 }}</span>/{{ totalNum }}</div>
           <div class="picture">
             <img src="../../../assets/study/resultA.png">
-            <h1 class="resultA">回答正确</h1>
+            <h3 class="resultA">回答正确</h3>
           </div>
           <div class="answer">
-            <h1>{{ answer }}</h1>
+            <h3>{{ answer }}</h3>
             <label>{{ phoneticSymbol }}</label>
             <i class="el-icon-video-play" />
           </div>
@@ -78,10 +78,10 @@
           <div class="number"><span>{{ nowPosition + 1 }}</span>/{{ totalNum }}</div>
           <div class="picture">
             <img src="../../../assets/study/resultB.png">
-            <h1 class="resultB">回答错误</h1>
+            <h3 class="resultB">回答错误</h3>
           </div>
           <div class="answer">
-            <h1>{{ answer }}</h1>
+            <h3>{{ answer }}</h3>
             <label>{{ phoneticSymbol }}</label>
             <i class="el-icon-video-play" />
           </div>
@@ -92,9 +92,9 @@
       </el-col>
       <el-col v-show="dialogResult" :span="24">
         <div class="grid-content bg-purple">
-          <h1 align="center">回答正确{{ rightNum }}个</h1>
-          <h1 align="center">回答错误{{ totalNum - rightNum }}个</h1>
-          <h1 align="center">正确率{{ correctness }}%</h1>
+          <h3 align="center">回答正确{{ rightNum }}个</h3>
+          <h3 align="center">回答错误{{ totalNum - rightNum }}个</h3>
+          <h3 align="center">正确率{{ correctness }}%</h3>
           <div class="btn-box">
             <el-button type="primary" round @click="nextStudy()">继续学习</el-button>
           </div>
@@ -102,7 +102,7 @@
       </el-col>
       <el-col v-show="dialogFinish" :span="24">
         <div class="grid-content bg-purple">
-          <h1 align="center">本书已学完</h1>
+          <h3 align="center">本书已学完</h3>
           <div class="btn-box">
             <el-button type="primary" round @click="reStudy()">重新学习</el-button>
           </div>
@@ -327,12 +327,12 @@ padding: 12px 20px 30px;
 }
 .grid-content .sound{
   text-align: center;
-  font-size: 18px;
+  /*font-size: 18px;*/
   margin-bottom: 12px;
 }
 .grid-content .sound .svg-icon{
    color: #409EFF;
-   font-size: 20px;
+   /*font-size: 20px;*/
    margin-left: 4px;
    cursor: pointer;
 }
@@ -351,14 +351,14 @@ padding: 12px 20px 30px;
   line-height: 220px;
   margin: 0px 20px 20px 20px;
 }
-.grid-content .picture h1{
+.grid-content .picture h3{
   text-align: center;
   margin: 0;
 }
-.grid-content .picture h1.resultA{
+.grid-content .picture h3.resultA{
   color: #67c23a;
 }
-.grid-content .picture h1.resultB{
+.grid-content .picture h3.resultB{
   color: #f56c6c;
 }
 .grid-content .answer{
@@ -366,7 +366,7 @@ padding: 12px 20px 30px;
   margin: 0px 20px 20px 20px;
   text-align: center;
 }
-.grid-content .answer h1{
+.grid-content .answer h3{
   padding: 60px 0 0 0;
 }
 </style>
