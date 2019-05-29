@@ -28,7 +28,7 @@
           </div>
         </div>
       </el-col> -->
-      <el-col v-show="dialogWrite" :span="24">
+      <el-col v-show="dialogWrite" :span="10" :offset="7">
         <div class="grid-content bg-purple">
 
           <div class="number"><span>{{ nowPosition + 1 }}</span>/{{ totalNum }}</div>
@@ -56,7 +56,7 @@
           <h3 v-for="obj in wordCh" :key="obj.key" align="center">{{ obj.pos }}.  {{ obj.meaning }}</h3>
         </div>
       </el-col> -->
-      <el-col v-show="dialogRight" :span="24">
+      <el-col v-show="dialogRight" :span="10" :offset="7">
         <div class="grid-content bg-purple">
           <div class="number"><span>{{ nowPosition + 1 }}</span>/{{ totalNum }}</div>
           <div class="picture">
@@ -73,7 +73,7 @@
           </div>
         </div>
       </el-col>
-      <el-col v-show="dialogWrong" :span="24">
+      <el-col v-show="dialogWrong" :span="10" :offset="7">
         <div class="grid-content bg-purple">
           <div class="number"><span>{{ nowPosition + 1 }}</span>/{{ totalNum }}</div>
           <div class="picture">
@@ -90,18 +90,21 @@
           </div>
         </div>
       </el-col>
-      <el-col v-show="dialogResult" :span="24">
+      <el-col v-show="dialogResult" :span="10" :offset="7">
         <div class="grid-content bg-purple">
-          <h3 align="center">回答正确{{ rightNum }}个</h3>
-          <h3 align="center">回答错误{{ totalNum - rightNum }}个</h3>
-          <h3 align="center">正确率{{ correctness }}%</h3>
+          <ul class="result">
+            <li><h1><span>{{ rightNum }}</span>个</h1><h3 align="center">回答正确</h3></li>
+            <li><h1><span>{{ totalNum - rightNum }}</span>个</h1><h3 align="center">回答错误</h3></li>
+            <li><el-progress type="circle" :percentage="correctness" /><h3 align="center">正确率</h3></li>
+          </ul>
           <div class="btn-box">
             <el-button type="primary" round @click="nextStudy()">继续学习</el-button>
           </div>
         </div>
       </el-col>
-      <el-col v-show="dialogFinish" :span="24">
-        <div class="grid-content bg-purple">
+      <el-col v-show="dialogFinish" :span="12" :offset="6">
+        <div class="grid-content bg-purple" style="text-align: center;">
+          <img width="300" src="../../../assets/study/word-done.png">
           <h3 align="center">本书已学完</h3>
           <div class="btn-box">
             <el-button type="primary" round @click="reStudy()">重新学习</el-button>
@@ -336,6 +339,10 @@ padding: 12px 20px 30px;
    margin-left: 4px;
    cursor: pointer;
 }
+.grid-content .sound label{
+  font-weight: normal;
+  color: #999999;
+  }
 .grid-content .select-box  dd{
   margin: 0 20px 20px 20px;
   }
@@ -366,7 +373,41 @@ padding: 12px 20px 30px;
   margin: 0px 20px 20px 20px;
   text-align: center;
 }
+.grid-content .answer label{
+  font-weight: normal;
+  color: #999999;
+  }
 .grid-content .answer h3{
   padding: 60px 0 0 0;
+}
+.grid-content .result{
+  display: flex;
+  }
+.grid-content .result li{
+  list-style: none;
+  flex: 1;
+  text-align: center;
+}
+.grid-content .result li h1{
+  margin: 0;
+  line-height: 130px;
+  height: 130px;
+  font-size: 16px;
+  font-family: "微软雅黑";
+  font-weight: normal;
+}
+.grid-content .result li h1 span{
+  font-size: 42px;
+}
+.grid-content .result li:first-child span{
+  color: #81d842;
+}
+.grid-content .result li:nth-child(2) span{
+  color: #f75353;
+}
+.grid-content .result li h3{
+  font-size: 16px;
+  font-family: "微软雅黑";
+  font-weight: normal;
 }
 </style>
