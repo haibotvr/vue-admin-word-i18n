@@ -126,7 +126,7 @@ export default {
       audio: '',
       tmId: undefined,
       chapterId: undefined,
-      correctness: '',
+      correctness: 0.00,
       rightNum: 0,
       wrongNum: 0,
       nextWordText: '下一个单词',
@@ -266,7 +266,7 @@ export default {
     nextChapter() {
       this.rightNum = 0
       this.wrongNum = 0
-      this.correctness = ''
+      this.correctness = 0.00
       this.writeAnswer = ''
     },
     nextStudy() {
