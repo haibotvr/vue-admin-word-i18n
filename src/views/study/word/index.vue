@@ -1,33 +1,6 @@
 <template>
   <div class="app-container">
     <el-row :gutter="18">
-      <!-- <el-col :span="24" v-show="false">
-        <div class="grid-content bg-purple">
-          <div class="number"><span>{{ nowPosition + 1 }}</span>/{{ totalNum }}</div>
-          <div class="picture"><img src="../../../assets/study/orange.png" /></div>
-          <div class="sound" @click="playSound()">
-            <label>{{ phoneticSymbol }}</label>
-            <svg-icon icon-class="sound" />
-          </div>
-          <dl class="select-box">
-            <dd>
-              <el-radio v-model="radio1" label="1" border>备选项1</el-radio>
-            </dd>
-            <dd>
-              <el-radio v-model="radio1" label="2" border>备选项2</el-radio>
-            </dd>
-            <dd>
-              <el-radio v-model="radio1" label="3" border>备选项1</el-radio>
-            </dd>
-            <dd>
-              <el-radio v-model="radio1" label="4" border>备选项1</el-radio>
-            </dd>
-          </dl>
-          <div class="btn-box">
-            <el-button type="primary" round>确定</el-button>
-          </div>
-        </div>
-      </el-col> -->
       <el-col v-show="dialogWrite" :span="10" :offset="7">
         <div class="grid-content bg-purple">
 
@@ -51,11 +24,6 @@
           </div>
         </div>
       </el-col>
-      <!-- <el-col v-show="dialogTip" :span="24">
-        <div class="grid-content bg-purple">
-          <h3 v-for="obj in wordCh" :key="obj.key" align="center">{{ obj.pos }}.  {{ obj.meaning }}</h3>
-        </div>
-      </el-col> -->
       <el-col v-show="dialogRight" :span="10" :offset="7">
         <div class="grid-content bg-purple">
           <div class="number"><span>{{ nowPosition + 1 }}</span>/{{ totalNum }}</div>
@@ -126,7 +94,7 @@ export default {
       audio: '',
       tmId: undefined,
       chapterId: undefined,
-      correctness: 0.00,
+      correctness: 0,
       rightNum: 0,
       wrongNum: 0,
       nextWordText: '下一个单词',
@@ -161,7 +129,26 @@ export default {
     document.onkeydown = function(e) {
       const key = window.event.keyCode
       if (key === 13) {
-        _this.checkWord(_this.writeAnswer)
+        if (_this.dialogWrite) {
+          _this.checkWord(_this.writeAnswer)
+          return
+        }
+        if (_this.dialogRight) {
+          _this.nextWord()
+          return
+        }
+        if (_this.dialogWrong) {
+          _this.nextWord()
+          return
+        }
+        if (_this.dialogResult) {
+          _this.nextStudy()
+          return
+        }
+        if (_this.dialogFinish) {
+          _this.reStudy()
+          return
+        }
       }
     }
     this.tmId = this.$route.params.id
@@ -241,7 +228,7 @@ export default {
       }
     },
     showResult() {
-      this.correctness = (this.rightNum * 100 / this.totalNum).toFixed(2)
+      this.correctness = Number((this.rightNum * 100 / this.totalNum).toFixed(0))
       this.dialogResult = true
       this.dialogRight = false
       this.dialogWrong = false
