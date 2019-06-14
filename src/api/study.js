@@ -1,8 +1,16 @@
 import request from '@/utils/request'
 
-export function addStudyLog(data) {
+export function addStudy(data) {
   return request({
     url: '/study/add',
+    method: 'post',
+    data
+  })
+}
+
+export function addStudyLog(data) {
+  return request({
+    url: '/study/addLog',
     method: 'post',
     data
   })

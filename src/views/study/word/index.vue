@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import { selectWords, addStudyLog, reStudy } from '@/api/study'
+import { selectWords, addStudy, reStudy, addStudyLog } from '@/api/study'
 
 export default {
   data() {
@@ -109,6 +109,8 @@ export default {
       answer: 'book',
       writeAnswer: '',
       phoneticSymbol: '[bʊk]',
+      studyDetail: '',
+      tempStudyDetail: [],
       wordCh: [
         {
           pos: 'n',
@@ -212,6 +214,16 @@ export default {
       if ((this.nowPosition + 1) === this.totalNum) {
         this.nextWordText = '查看学习结果'
       }
+      this.addStudyDetail()
+    },
+    addStudyLog() {
+      const temp = {
+        isTip: this.dialogTip,
+        answer: this.answer,
+        writeAnswer: this.writeAnswer
+      }
+      this.tempStudyDetail.push(temp)
+      this.studyDetail = JSON.stringify(this.tempStudyDetail)
     },
     prePlay() {
       this.action = this.oriAction + this.answer
@@ -242,6 +254,11 @@ export default {
         totalNum: this.totalNum,
         rightNum: this.rightNum
       }
+      addStudy(temp).then(response => {
+        console.log(response.data)
+      })
+      temp['studyDetail'] = this.studyDetail
+      this.tempStudyDetail = []
       addStudyLog(temp).then(response => {
         console.log(response.data)
       })
