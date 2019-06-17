@@ -214,13 +214,14 @@ export default {
       if ((this.nowPosition + 1) === this.totalNum) {
         this.nextWordText = '查看学习结果'
       }
-      this.addStudyDetail()
+      this.addStudyLog()
     },
     addStudyLog() {
       const temp = {
         isTip: this.dialogTip,
         answer: this.answer,
-        writeAnswer: this.writeAnswer
+        writeAnswer: this.writeAnswer,
+        isRight: this.dialogRight
       }
       this.tempStudyDetail.push(temp)
       this.studyDetail = JSON.stringify(this.tempStudyDetail)
@@ -255,12 +256,13 @@ export default {
         rightNum: this.rightNum
       }
       addStudy(temp).then(response => {
-        console.log(response.data)
+        console.log(response.message)
       })
-      temp['studyDetail'] = this.studyDetail
-      this.tempStudyDetail = []
-      addStudyLog(temp).then(response => {
-        console.log(response.data)
+      const tempLog = Object.assign({}, temp)
+      tempLog['studyDetail'] = this.studyDetail
+      addStudyLog(tempLog).then(response => {
+        console.log(response.message)
+        this.tempStudyDetail = []
       })
     },
     nextPage() {
