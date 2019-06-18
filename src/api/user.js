@@ -22,3 +22,34 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function createUser(data) {
+  return request({
+    url: '/user/add',
+    method: 'post',
+    data
+  })
+}
+
+export function updateUser(data) {
+  return request({
+    url: '/user/edit',
+    method: 'post',
+    data
+  })
+}
+
+export function delUser(id) {
+  return request({
+    url: '/user/del/' + id,
+    method: 'get'
+  })
+}
+
+export function selectUser(data) {
+  return request({
+    url: '/user/findByPage',
+    method: 'post',
+    data
+  })
+}

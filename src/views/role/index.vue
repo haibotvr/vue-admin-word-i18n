@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="学校名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.title" placeholder="角色名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
@@ -24,9 +24,9 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="学校名称" align="center">
+      <el-table-column label="角色名称" align="center">
         <template slot-scope="scope">
-          {{ scope.row.schoolName }}
+          {{ scope.row.roleName }}
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="状态" width="110" align="center">
@@ -54,9 +54,6 @@
           <el-button v-if="row.ewStatus!=0" size="mini" type="danger" @click="handleDelete(row.id)">
             删除
           </el-button>
-          <el-button v-if="row.ewStatus!=0" size="mini" type="warning" @click="handleUser(row.id)">
-            用户
-          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -65,8 +62,8 @@
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
-        <el-form-item label="学校名称" prop="schoolName">
-          <el-input v-model="temp.schoolName" />
+        <el-form-item label="角色名称" prop="roleName">
+          <el-input v-model="temp.roleName" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -83,7 +80,7 @@
 </template>
 
 <script>
-import { createSchool, updateSchool, delSchool, selectSchool } from '@/api/school'
+import { createRole, updateRole, delRole, selectRole } from '@/api/role'
 import Pagination from '@/components/Pagination'
 import waves from '@/directive/waves' // waves directive
 
@@ -114,11 +111,11 @@ export default {
       params: {
         pageNum: 1,
         pageSize: 5,
-        schoolName: ''
+        roleName: ''
       },
       temp: {
         id: undefined,
-        schoolName: ''
+        roleName: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -127,7 +124,7 @@ export default {
         create: '新增'
       },
       rules: {
-        schoolName: [{ required: true, message: '请填写学校名称', trigger: 'blur' }]
+        roleName: [{ required: true, message: '请填写角色名称', trigger: 'blur' }]
       }
     }
   },
@@ -139,8 +136,8 @@ export default {
       this.listLoading = true
       this.params.pageNum = this.listQuery.page
       this.params.pageSize = this.listQuery.limit
-      this.params.schoolName = this.listQuery.title
-      selectSchool(this.params).then(response => {
+      this.params.roleName = this.listQuery.title
+      selectRole(this.params).then(response => {
         this.list = response.data.list
         this.total = response.data.total
         this.listLoading = false
@@ -149,7 +146,7 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        schoolName: ''
+        roleName: ''
       }
     },
     sortChange(data) {
@@ -181,7 +178,7 @@ export default {
     createData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          createSchool(this.temp).then(response => {
+          createRole(this.temp).then(response => {
             this.resetTemp()
             this.fetchData()
             this.dialogFormVisible = false
@@ -201,7 +198,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
-          updateSchool(this.temp).then(response => {
+          updateRole(this.temp).then(response => {
             this.resetTemp()
             this.fetchData()
             this.dialogFormVisible = false
@@ -209,16 +206,13 @@ export default {
         }
       })
     },
-    handleUser(id) {
-      this.$router.push({ path: 'user/' + id })
-    },
     handleDelete(id) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        delSchool(id).then(response => {
+        delRole(id).then(response => {
           this.fetchData()
           this.$message({
             type: 'success',

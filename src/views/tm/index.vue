@@ -54,11 +54,9 @@
           <el-button v-if="row.ewStatus!=0" size="mini" type="danger" @click="handleDelete(row.id)">
             删除
           </el-button>
-          <router-link v-if="row.ewStatus!=0" :to="'/ts/chapter/'+row.id">
-            <el-button type="success" size="mini">
-              章节
-            </el-button>
-          </router-link>
+          <el-button v-if="row.ewStatus!=0" size="mini" type="warning" @click="handleChapter(row.id)">
+            章节
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -210,6 +208,9 @@ export default {
           })
         }
       })
+    },
+    handleChapter(id) {
+      this.$router.push({ path: 'chapter/' + id })
     },
     handleDelete(id) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {

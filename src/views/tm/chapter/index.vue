@@ -54,11 +54,9 @@
           <el-button v-if="row.ewStatus!=0" size="mini" type="danger" @click="handleDelete(row.id)">
             删除
           </el-button>
-          <router-link v-if="row.ewStatus!=0" :to="'/ts/chapter/detail/'+row.id">
-            <el-button type="warning" size="mini">
-              单词
-            </el-button>
-          </router-link>
+          <el-button v-if="row.ewStatus!=0" size="mini" type="warning" @click="handleWord(row.id)">
+            单词
+          </el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -216,6 +214,9 @@ export default {
           })
         }
       })
+    },
+    handleWord(id) {
+      this.$router.push({ path: 'detail/' + id })
     },
     handleDelete(id) {
       this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {

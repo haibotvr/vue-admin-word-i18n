@@ -152,6 +152,19 @@ export const asyncRoutes = [
         meta: { title: '教材' }
       },
       {
+        path: 'role',
+        component: () => import('@/views/role/index'),
+        name: '角色',
+        meta: { title: '角色' }
+      },
+      {
+        path: 'user/:id(\\d+)',
+        component: () => import('@/views/school/user/index'),
+        name: '用户',
+        meta: { title: '用户', noCache: true },
+        hidden: true
+      },
+      {
         path: 'chapter/:id(\\d+)',
         component: () => import('@/views/tm/chapter/index'),
         name: '章节',
