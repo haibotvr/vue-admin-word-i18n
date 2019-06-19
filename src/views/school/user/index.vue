@@ -29,6 +29,16 @@
           {{ scope.row.realName }}
         </template>
       </el-table-column>
+      <el-table-column label="手机号码" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.userPhone }}
+        </template>
+      </el-table-column>
+      <el-table-column label="邮箱" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.userEmail }}
+        </template>
+      </el-table-column>
       <el-table-column class-name="status-col" label="状态" width="110" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.ewStatus | statusFilter">{{ scope.row.ewStatus == 1 ? "可用" : "删除" }}</el-tag>
@@ -46,7 +56,7 @@
           <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="350" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <el-button v-if="row.ewStatus!=0" size="mini" type="primary" @click="handleUpdate(row)">
             编辑
@@ -61,9 +71,21 @@
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchData" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="150px" style="width: 400px; margin-left:130px;">
         <el-form-item label="用户姓名" prop="realName">
           <el-input v-model="temp.realName" />
+        </el-form-item>
+        <el-form-item label="用户手机号码" prop="userPhone">
+          <el-input v-model="temp.userPhone" />
+        </el-form-item>
+        <el-form-item v-show="dialogStatus==='create'" label="登录账号" prop="loginName">
+          <el-input v-model="temp.loginName" />
+        </el-form-item>
+        <el-form-item v-show="dialogStatus==='create'" label="登录密码" prop="loginPassword">
+          <el-input v-model="temp.loginPassword" />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="userEmail">
+          <el-input v-model="temp.userEmail" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -115,7 +137,12 @@ export default {
       },
       temp: {
         id: undefined,
-        realName: ''
+        realName: '',
+        userPhone: '',
+        loginName: '',
+        loginPassword: '',
+        userEmail: '',
+        schoolId: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -124,7 +151,9 @@ export default {
         create: '新增'
       },
       rules: {
-        realName: [{ required: true, message: '请填写用户姓名', trigger: 'blur' }]
+        realName: [{ required: true, message: '请填写用户姓名', trigger: 'blur' }],
+        userPhone: [{ required: true, message: '请填写手机号码', trigger: 'blur' }],
+        loginName: [{ required: true, message: '请填写登录账号', trigger: 'blur' }]
       },
       schoolId: undefined
     }
@@ -139,6 +168,7 @@ export default {
       this.params.pageNum = this.listQuery.page
       this.params.pageSize = this.listQuery.limit
       this.params.realName = this.listQuery.title
+      this.params.schoolId = this.schoolId
       selectUser(this.params).then(response => {
         this.list = response.data.list
         this.total = response.data.total
@@ -148,7 +178,12 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        realName: ''
+        realName: '',
+        userPhone: '',
+        loginName: '',
+        loginPassword: '',
+        userEmail: '',
+        schoolId: this.schoolId
       }
     },
     sortChange(data) {
@@ -190,7 +225,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      this.temp.id = row.id
+      this.temp.loginPassword = undefined
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
       this.$nextTick(() => {
@@ -200,6 +235,7 @@ export default {
     updateData() {
       this.$refs['dataForm'].validate((valid) => {
         if (valid) {
+          this.temp.loginPassword = undefined
           updateUser(this.temp).then(response => {
             this.resetTemp()
             this.fetchData()
