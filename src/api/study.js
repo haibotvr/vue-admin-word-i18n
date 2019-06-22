@@ -29,3 +29,10 @@ export function reStudy(id) {
     method: 'get'
   })
 }
+
+export function selectWordDetail(id) {
+  return request({
+    url: '/study/findWordDetail/' + id,
+    method: 'get'
+  })
+}

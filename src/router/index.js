@@ -201,7 +201,21 @@ export const asyncRoutes = [
         path: 'word/:id(\\d+)',
         component: () => import('@/views/study/word/index'),
         name: '单词学习',
-        meta: { title: '单词学习' }
+        meta: { title: '单词学习' },
+        hidden: true
+      },
+      {
+        path: 'log',
+        component: () => import('@/views/study/log/index'),
+        name: '学习日志',
+        meta: { title: '学习日志' }
+      },
+      {
+        path: 'log/chapter/:id(\\d+)',
+        component: () => import('@/views/study/word/chapter'),
+        name: '章节学习',
+        meta: { title: '章节学习' },
+        hidden: true
       }
     ]
   },
