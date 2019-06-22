@@ -19,11 +19,6 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column align="center" label="序号" width="95">
-        <template slot-scope="scope">
-          {{ scope.$index + 1 }}
-        </template>
-      </el-table-column>
       <el-table-column label="用户姓名" align="center">
         <template slot-scope="scope">
           {{ scope.row.realName }}
@@ -34,12 +29,17 @@
           {{ scope.row.userPhone }}
         </template>
       </el-table-column>
+      <el-table-column label="登录账号" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.loginName }}
+        </template>
+      </el-table-column>
       <el-table-column label="邮箱" align="center">
         <template slot-scope="scope">
           {{ scope.row.userEmail }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="状态" width="110" align="center">
+      <el-table-column class-name="status-col" label="状态" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.ewStatus | statusFilter">{{ scope.row.ewStatus == 1 ? "可用" : "删除" }}</el-tag>
         </template>
@@ -48,12 +48,6 @@
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ scope.row.createTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="update_at" label="修改时间" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
