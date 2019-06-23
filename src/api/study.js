@@ -36,3 +36,11 @@ export function selectWordDetail(id) {
     method: 'get'
   })
 }
+
+export function review(data) {
+  return request({
+    url: '/study/findByPage',
+    method: 'post',
+    data
+  })
+}

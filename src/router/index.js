@@ -211,6 +211,12 @@ export const asyncRoutes = [
         meta: { title: '学习日志' }
       },
       {
+        path: 'word/review',
+        component: () => import('@/views/study/word/review'),
+        name: '单词复习',
+        meta: { title: '单词复习' }
+      },
+      {
         path: 'log/chapter/:id(\\d+)',
         component: () => import('@/views/study/word/chapter'),
         name: '章节学习',
