@@ -16,7 +16,7 @@
             <audio id="audioElement" :src="action" @canplay="prePlay()" />
           </div>
           <div class="write-answer">
-            <el-input v-model="writeAnswer" placeholder="请在此处填写单词答案" suffix-icon="el-icon-edit" prop="writeAnswer" clearable />
+            <el-input id="inputElement" v-model="writeAnswer" placeholder="请在此处填写单词答案" suffix-icon="el-icon-edit" autofocus="true" prop="writeAnswer" clearable />
           </div>
           <div class="btn-box">
             <el-button type="primary" round @click="tip()">提示</el-button>
@@ -120,6 +120,7 @@ export default {
     var _this = this
     document.onkeydown = function(e) {
       const key = window.event.keyCode
+      console.log(key)
       if (key === 13) {
         if (_this.dialogWrite) {
           _this.checkWord(_this.writeAnswer)
@@ -135,6 +136,11 @@ export default {
         }
         if (_this.dialogResult) {
           _this.reChapter()
+          return
+        }
+      } else if (key === 8) {
+        if (_this.dialogWrite) {
+          document.getElementById('inputElement').focus()
           return
         }
       }
