@@ -54,6 +54,11 @@
               学习
             </el-button>
           </router-link>
+          <router-link v-if="row.ewStatus!=0" :to="'/study/log/chart/'+row.chapterId">
+            <el-button type="warning" size="mini">
+              曲线
+            </el-button>
+          </router-link>
         </template>
       </el-table-column>
     </el-table>

@@ -7,3 +7,10 @@ export function selectLog(data) {
     data
   })
 }
+
+export function selectLogByChapter(id) {
+  return request({
+    url: '/studyLog/findByChapter/' + id,
+    method: 'get'
+  })
+}

@@ -222,6 +222,13 @@ export const asyncRoutes = [
         name: '章节学习',
         meta: { title: '章节学习' },
         hidden: true
+      },
+      {
+        path: 'log/chart/:id(\\d+)',
+        component: () => import('@/views/study/log/chart'),
+        name: '曲线',
+        meta: { title: '曲线' },
+        hidden: true
       }
     ]
   },
