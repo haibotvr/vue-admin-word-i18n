@@ -205,22 +205,22 @@ export const asyncRoutes = [
         hidden: true
       },
       {
-        path: 'log',
-        component: () => import('@/views/study/log/index'),
-        name: '学习日志',
-        meta: { title: '学习日志' }
-      },
-      {
         path: 'word/review',
         component: () => import('@/views/study/word/review'),
         name: '单词复习',
         meta: { title: '单词复习' }
       },
       {
+        path: 'log',
+        component: () => import('@/views/study/log/index'),
+        name: '学习日志',
+        meta: { title: '学习日志' }
+      },
+      {
         path: 'log/chapter/:id(\\d+)',
         component: () => import('@/views/study/word/chapter'),
-        name: '章节学习',
-        meta: { title: '章节学习' },
+        name: '章节复习',
+        meta: { title: '章节复习' },
         hidden: true
       },
       {

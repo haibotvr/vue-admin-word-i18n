@@ -21,6 +21,12 @@
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
+      <el-table-column align="center" prop="create_at" label="创建时间" width="200">
+        <template slot-scope="scope">
+          <i class="el-icon-time" />
+          <span>{{ scope.row.createTime }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="教材名称" align="center">
         <template slot-scope="scope">
           {{ scope.row.tmName }}
@@ -29,18 +35,6 @@
       <el-table-column class-name="status-col" label="状态" width="110" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.ewStatus | statusFilter">{{ scope.row.ewStatus == 1 ? "可用" : "删除" }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="create_at" label="创建时间" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.createTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="update_at" label="修改时间" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.updateTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" width="350" class-name="small-padding fixed-width">

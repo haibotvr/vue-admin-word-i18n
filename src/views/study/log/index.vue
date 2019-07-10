@@ -16,9 +16,28 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column align="center" label="序号" width="95">
+      <el-table-column type="expand">
         <template slot-scope="scope">
-          {{ scope.$index + 1 }}
+          <el-form v-for="detail in scope.row.studyDetail" :key="detail.key" :label="detail.pos" label-position="left" inline class="demo-table-expand">
+            <el-form-item label="正确答案">
+              <span>{{ detail.answer }}</span>
+            </el-form-item>
+            <el-form-item label="输入答案">
+              <span>{{ detail.writeAnswer }}</span>
+            </el-form-item>
+            <el-form-item label="是否提示">
+              <span>{{ detail.isTip == true ? "是" : "否" }}</span>
+            </el-form-item>
+            <el-form-item label="是否正确">
+              <span>{{ detail.isRight == true ? "是" : "否" }}</span>
+            </el-form-item>
+          </el-form>
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="create_at" label="学习时间" width="200">
+        <template slot-scope="scope">
+          <i class="el-icon-time" />
+          <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="教材名称" align="center">
@@ -41,17 +60,11 @@
           <el-tag :type="scope.row.ewStatus | statusFilter">{{ scope.row.ewStatus == 1 ? "可用" : "删除" }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="create_at" label="创建时间" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.createTime }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="{row}">
           <router-link v-if="row.ewStatus!=0" :to="'/study/log/chapter/'+row.chapterId">
             <el-button type="success" size="mini">
-              学习
+              复习
             </el-button>
           </router-link>
           <router-link v-if="row.ewStatus!=0" :to="'/study/log/chart/'+row.chapterId">
@@ -115,6 +128,13 @@ export default {
       this.params.keyWord = this.listQuery.title
       selectLog(this.params).then(response => {
         this.list = response.data.list
+        for (const i in this.list) {
+          if (this.list[i].studyDetail !== null && this.list[i].studyDetail !== undefined) {
+            this.list[i].studyDetail = JSON.parse(this.list[i].studyDetail)
+          } else {
+            this.list[i].wordCh = []
+          }
+        }
         this.total = response.data.total
         this.listLoading = false
       })
@@ -140,3 +160,18 @@ export default {
   }
 }
 </script>
+
+<style>
+  .demo-table-expand {
+    font-size: 0;
+  }
+  .demo-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .demo-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 25%;
+  }
+</style>

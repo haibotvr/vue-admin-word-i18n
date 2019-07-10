@@ -46,7 +46,7 @@
         <template slot-scope="{row}">
           <router-link v-if="row.ewStatus!=0" :to="'/study/log/chapter/'+row.chapterId">
             <el-button type="success" size="mini">
-              学习
+              复习
             </el-button>
           </router-link>
         </template>

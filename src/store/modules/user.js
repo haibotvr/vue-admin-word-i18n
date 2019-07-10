@@ -35,8 +35,9 @@ const actions = {
     return new Promise((resolve, reject) => {
       login({ username: username.trim(), password: password }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
+        const token = data.tokenHead + ' ' + data.token
+        commit('SET_TOKEN', token)
+        setToken(token)
         resolve()
       }).catch(error => {
         reject(error)
@@ -55,7 +56,7 @@ const actions = {
         }
 
         // const { roles, name, avatar, introduction } = data
-        const { realName, userAvatar } = data.user
+        const { realName, userAvatar } = data
         const roles = ['editor']
         const introduction = 'I am simon'
         // roles must be a non-empty array
