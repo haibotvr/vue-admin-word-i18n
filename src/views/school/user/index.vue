@@ -199,7 +199,7 @@ export default {
         loginPassword: '',
         userEmail: '',
         schoolId: this.schoolId,
-        role: undefined
+        role: []
       }
     },
     sortChange(data) {
@@ -241,6 +241,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
+      console.log(row.role)
       this.temp.loginPassword = undefined
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
