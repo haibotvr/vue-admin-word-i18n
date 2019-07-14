@@ -30,3 +30,10 @@ export function selectRole(data) {
     data
   })
 }
+
+export function findRoles() {
+  return request({
+    url: '/role/findRoles',
+    method: 'post'
+  })
+}

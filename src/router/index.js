@@ -82,6 +82,57 @@ export const constantRoutes = [
         meta: { title: 'dashboard', icon: 'dashboard', affix: true }
       }
     ]
+  },
+  {
+    path: '/study',
+    component: Layout,
+    redirect: '/study/tm',
+    name: '学习系统',
+    meta: {
+      title: '学习系统',
+      icon: 'form'
+    },
+    children: [
+      {
+        path: 'tm',
+        component: () => import('@/views/study/index'),
+        name: '教材选择',
+        meta: { title: '教材选择' }
+      },
+      {
+        path: 'word/:id(\\d+)',
+        component: () => import('@/views/study/word/index'),
+        name: '单词学习',
+        meta: { title: '单词学习' },
+        hidden: true
+      },
+      {
+        path: 'word/review',
+        component: () => import('@/views/study/word/review'),
+        name: '单词复习',
+        meta: { title: '单词复习' }
+      },
+      {
+        path: 'log',
+        component: () => import('@/views/study/log/index'),
+        name: '学习日志',
+        meta: { title: '学习日志' }
+      },
+      {
+        path: 'log/chapter/:id(\\d+)',
+        component: () => import('@/views/study/word/chapter'),
+        name: '章节复习',
+        meta: { title: '章节复习' },
+        hidden: true
+      },
+      {
+        path: 'log/chart/:id(\\d+)',
+        component: () => import('@/views/study/log/chart'),
+        name: '曲线',
+        meta: { title: '曲线' },
+        hidden: true
+      }
+    ]
   }
   // {
   //   path: '/documentation',
@@ -136,7 +187,8 @@ export const asyncRoutes = [
     name: '教学系统',
     meta: {
       title: '教学系统',
-      icon: 'education'
+      icon: 'education',
+      roles: ['headmaster', 'teacher', 'superadmin']
     },
     children: [
       {
@@ -155,7 +207,7 @@ export const asyncRoutes = [
         path: 'role',
         component: () => import('@/views/role/index'),
         name: '角色',
-        meta: { title: '角色' }
+        meta: { title: '角色', roles: ['superadmin'] }
       },
       {
         path: 'user/:id(\\d+)',
@@ -176,58 +228,6 @@ export const asyncRoutes = [
         component: () => import('@/views/tm/chapter/detail/index'),
         name: '单词',
         meta: { title: '单词', noCache: true },
-        hidden: true
-      }
-    ]
-  },
-
-  {
-    path: '/study',
-    component: Layout,
-    redirect: '/study/tm',
-    name: '学习系统',
-    meta: {
-      title: '学习系统',
-      icon: 'form'
-    },
-    children: [
-      {
-        path: 'tm',
-        component: () => import('@/views/study/index'),
-        name: '教材选择',
-        meta: { title: '教材选择' }
-      },
-      {
-        path: 'word/:id(\\d+)',
-        component: () => import('@/views/study/word/index'),
-        name: '单词学习',
-        meta: { title: '单词学习' },
-        hidden: true
-      },
-      {
-        path: 'word/review',
-        component: () => import('@/views/study/word/review'),
-        name: '单词复习',
-        meta: { title: '单词复习' }
-      },
-      {
-        path: 'log',
-        component: () => import('@/views/study/log/index'),
-        name: '学习日志',
-        meta: { title: '学习日志' }
-      },
-      {
-        path: 'log/chapter/:id(\\d+)',
-        component: () => import('@/views/study/word/chapter'),
-        name: '章节复习',
-        meta: { title: '章节复习' },
-        hidden: true
-      },
-      {
-        path: 'log/chart/:id(\\d+)',
-        component: () => import('@/views/study/log/chart'),
-        name: '曲线',
-        meta: { title: '曲线' },
         hidden: true
       }
     ]

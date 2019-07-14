@@ -56,12 +56,11 @@ const actions = {
         }
 
         // const { roles, name, avatar, introduction } = data
-        const { realName, userAvatar } = data
-        const roles = ['editor']
+        const { realName, userAvatar, roles } = data
         const introduction = 'I am simon'
         // roles must be a non-empty array
         if (!roles || roles.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
+          reject('此用户没有对应的角色')
         }
         commit('SET_ROLES', roles)
         commit('SET_NAME', realName)

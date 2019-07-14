@@ -78,6 +78,16 @@
         <el-form-item v-show="dialogStatus==='create'" label="登录密码" prop="loginPassword">
           <el-input v-model="temp.loginPassword" />
         </el-form-item>
+        <el-form-item label="角色" prop="roles">
+          <el-select v-model="temp.role" multiple placeholder="请选择角色">
+            <el-option
+              v-for="item in roles"
+              :key="item.id"
+              :label="item.roleName"
+              :value="item.id"
+            />
+          </el-select>
+        </el-form-item>
         <el-form-item label="邮箱" prop="userEmail">
           <el-input v-model="temp.userEmail" />
         </el-form-item>
@@ -97,6 +107,7 @@
 
 <script>
 import { createUser, updateUser, delUser, selectUser } from '@/api/user'
+import { findRoles } from '@/api/role'
 import Pagination from '@/components/Pagination'
 import waves from '@/directive/waves' // waves directive
 
@@ -116,6 +127,7 @@ export default {
     return {
       tableKey: 0,
       list: null,
+      roles: null,
       listLoading: true,
       total: 100,
       listQuery: {
@@ -136,7 +148,8 @@ export default {
         loginName: '',
         loginPassword: '',
         userEmail: '',
-        schoolId: undefined
+        schoolId: undefined,
+        role: undefined
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -155,6 +168,7 @@ export default {
   created() {
     this.schoolId = this.$route.params.id
     this.fetchData()
+    this.getRoles()
   },
   methods: {
     fetchData() {
@@ -169,6 +183,13 @@ export default {
         this.listLoading = false
       })
     },
+    getRoles() {
+      findRoles().then(response => {
+        this.roles = response.data
+        console.log(this.roles)
+        this.listLoading = false
+      })
+    },
     resetTemp() {
       this.temp = {
         id: undefined,
@@ -177,7 +198,8 @@ export default {
         loginName: '',
         loginPassword: '',
         userEmail: '',
-        schoolId: this.schoolId
+        schoolId: this.schoolId,
+        role: undefined
       }
     },
     sortChange(data) {
