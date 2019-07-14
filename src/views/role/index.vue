@@ -35,6 +35,11 @@
           {{ scope.row.roleName }}
         </template>
       </el-table-column>
+      <el-table-column label="角色编码" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.roleCode }}
+        </template>
+      </el-table-column>
       <el-table-column class-name="status-col" label="状态" width="110" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.ewStatus | statusFilter">{{ scope.row.ewStatus == 1 ? "可用" : "删除" }}</el-tag>
@@ -58,6 +63,9 @@
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
         <el-form-item label="角色名称" prop="roleName">
           <el-input v-model="temp.roleName" />
+        </el-form-item>
+        <el-form-item label="角色编码" prop="roleCode">
+          <el-input v-model="temp.roleCode" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -109,7 +117,8 @@ export default {
       },
       temp: {
         id: undefined,
-        roleName: ''
+        roleName: '',
+        roleCode: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -118,7 +127,8 @@ export default {
         create: '新增'
       },
       rules: {
-        roleName: [{ required: true, message: '请填写角色名称', trigger: 'blur' }]
+        roleName: [{ required: true, message: '请填写角色名称', trigger: 'blur' }],
+        roleCode: [{ required: true, message: '请填写角色编码', trigger: 'blur' }]
       }
     }
   },
@@ -140,7 +150,8 @@ export default {
     resetTemp() {
       this.temp = {
         id: undefined,
-        roleName: ''
+        roleName: '',
+        roleCode: ''
       }
     },
     sortChange(data) {

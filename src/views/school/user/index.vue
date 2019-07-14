@@ -19,6 +19,12 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
+      <el-table-column align="center" prop="create_at" label="创建时间" width="200">
+        <template slot-scope="scope">
+          <i class="el-icon-time" />
+          <span>{{ scope.row.createTime }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="用户姓名" align="center">
         <template slot-scope="scope">
           {{ scope.row.realName }}
@@ -34,20 +40,14 @@
           {{ scope.row.loginName }}
         </template>
       </el-table-column>
-      <el-table-column label="邮箱" align="center">
+      <el-table-column label="角色" align="center">
         <template slot-scope="scope">
-          {{ scope.row.userEmail }}
+          {{ scope.row.roleName }}
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="状态" align="center">
         <template slot-scope="scope">
           <el-tag :type="scope.row.ewStatus | statusFilter">{{ scope.row.ewStatus == 1 ? "可用" : "删除" }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="create_at" label="创建时间" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
@@ -72,14 +72,8 @@
         <el-form-item label="用户手机号码" prop="userPhone">
           <el-input v-model="temp.userPhone" />
         </el-form-item>
-        <el-form-item v-show="dialogStatus==='create'" label="登录账号" prop="loginName">
-          <el-input v-model="temp.loginName" />
-        </el-form-item>
-        <el-form-item v-show="dialogStatus==='create'" label="登录密码" prop="loginPassword">
-          <el-input v-model="temp.loginPassword" />
-        </el-form-item>
-        <el-form-item label="角色" prop="roles">
-          <el-select v-model="temp.role" multiple placeholder="请选择角色">
+        <el-form-item label="角色" prop="roleIds">
+          <el-select v-model="temp.roleIds" multiple placeholder="请选择角色">
             <el-option
               v-for="item in roles"
               :key="item.id"
@@ -87,6 +81,12 @@
               :value="item.id"
             />
           </el-select>
+        </el-form-item>
+        <el-form-item v-show="dialogStatus==='create'" label="登录账号" prop="loginName">
+          <el-input v-model="temp.loginName" />
+        </el-form-item>
+        <el-form-item v-show="dialogStatus==='create'" label="登录密码" prop="loginPassword">
+          <el-input v-model="temp.loginPassword" />
         </el-form-item>
         <el-form-item label="邮箱" prop="userEmail">
           <el-input v-model="temp.userEmail" />
@@ -132,13 +132,13 @@ export default {
       total: 100,
       listQuery: {
         page: 1,
-        limit: 5,
+        limit: 10,
         title: '',
         sort: '+id'
       },
       params: {
         pageNum: 1,
-        pageSize: 5,
+        pageSize: 10,
         realName: ''
       },
       temp: {
@@ -149,7 +149,7 @@ export default {
         loginPassword: '',
         userEmail: '',
         schoolId: undefined,
-        role: undefined
+        roleIds: []
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -160,7 +160,8 @@ export default {
       rules: {
         realName: [{ required: true, message: '请填写用户姓名', trigger: 'blur' }],
         userPhone: [{ required: true, message: '请填写手机号码', trigger: 'blur' }],
-        loginName: [{ required: true, message: '请填写登录账号', trigger: 'blur' }]
+        loginName: [{ required: true, message: '请填写登录账号', trigger: 'blur' }],
+        roleIds: [{ required: true, message: '请选择角色', trigger: 'blur' }]
       },
       schoolId: undefined
     }
@@ -199,7 +200,7 @@ export default {
         loginPassword: '',
         userEmail: '',
         schoolId: this.schoolId,
-        role: []
+        roleIds: []
       }
     },
     sortChange(data) {
@@ -241,7 +242,7 @@ export default {
     },
     handleUpdate(row) {
       this.temp = Object.assign({}, row) // copy obj
-      console.log(row.role)
+      console.log(this.temp)
       this.temp.loginPassword = undefined
       this.dialogStatus = 'update'
       this.dialogFormVisible = true
