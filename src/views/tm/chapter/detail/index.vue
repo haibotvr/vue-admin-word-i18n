@@ -138,13 +138,13 @@ export default {
       chapterId: undefined,
       listQuery: {
         page: 1,
-        limit: 5,
+        limit: 10,
         title: '',
         sort: '+id'
       },
       params: {
         pageNum: 1,
-        pageSize: 5,
+        pageSize: 10,
         wordEn: '',
         chapterId: undefined
       },
