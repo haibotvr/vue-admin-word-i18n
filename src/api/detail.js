@@ -30,3 +30,11 @@ export function selectDetail(data) {
     data
   })
 }
+
+export function readExcel(data, chapterId) {
+  return request({
+    url: '/detail/readExcel/' + chapterId,
+    method: 'post',
+    data
+  })
+}

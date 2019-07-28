@@ -8,6 +8,19 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         新增
       </el-button>
+      <el-upload
+        style="float:right"
+        :multiple="false"
+        :auto-upload="true"
+        :show-file-list="false"
+        :before-upload="beforeUpload"
+        :drag="false"
+        action=""
+        accept="xlsAccept:'application/vnd.ms-excel'"
+        :http-request="uploadFile"
+      >
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-upload" :loading="uploadLoading">导入单词</el-button>
+      </el-upload>
     </div>
     <el-table
       :key="tableKey"
@@ -71,7 +84,6 @@
         </template>
       </el-table-column>
     </el-table>
-
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchData" />
 
     <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
@@ -113,9 +125,10 @@
 </template>
 
 <script>
-import { createDetail, updateDetail, delDetail, selectDetail } from '@/api/detail'
+import { createDetail, updateDetail, delDetail, selectDetail, readExcel } from '@/api/detail'
 import Pagination from '@/components/Pagination'
 import waves from '@/directive/waves' // waves directive
+// import { Promise } from 'q'
 
 export default {
   components: { Pagination },
@@ -134,17 +147,18 @@ export default {
       tableKey: 0,
       list: null,
       listLoading: true,
+      uploadLoading: false,
       total: 100,
       chapterId: undefined,
       listQuery: {
         page: 1,
-        limit: 5,
+        limit: 10,
         title: '',
         sort: '+id'
       },
       params: {
         pageNum: 1,
-        pageSize: 5,
+        pageSize: 10,
         wordEn: '',
         chapterId: undefined
       },
@@ -177,6 +191,42 @@ export default {
     this.fetchData()
   },
   methods: {
+    // 上传文件之前的钩子
+    beforeUpload(file) {
+      // const isText = file.type === 'application/vnd.ms-excel'
+      // const isTextComputer = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      // return (isText | isTextComputer)
+      // const _this = this
+      // return new Promise(function(resolve, reject) {
+      //   const isText = file.type === 'application/vnd.ms-excel'
+      //   const isTextComputer = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      //   if (isText | isTextComputer) {
+      //     _this.$message.error('请上传Excel文件')
+      //     debugger
+      //     reject(false)
+      //   }
+      // })
+    },
+    uploadFile(item) {
+      this.uploadLoading = true
+      const fileObj = item.file
+      const isText = fileObj.type === 'application/vnd.ms-excel'
+      const isTextComputer = fileObj.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      if (!isText & !isTextComputer) {
+        this.$message.warning('请上传Excel文件')
+        return
+      }
+      const form = new FormData()
+      form.append('file', fileObj)
+      readExcel(form, this.chapterId).then(response => {
+        if (response.code === 200) {
+          this.$message.success('文件：' + fileObj.name + '上传成功')
+        } else {
+          this.$message.error(response.message)
+        }
+        this.uploadLoading = false
+      })
+    },
     removeDomain(item) {
       var index = this.temp.wordCh.indexOf(item)
       if (index !== 0) {
