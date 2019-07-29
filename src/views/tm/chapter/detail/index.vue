@@ -214,6 +214,7 @@ export default {
       const isTextComputer = fileObj.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
       if (!isText & !isTextComputer) {
         this.$message.warning('请上传Excel文件')
+        this.uploadLoading = false
         return
       }
       const form = new FormData()
