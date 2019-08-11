@@ -226,6 +226,9 @@ export default {
           this.$message.error(response.message)
         }
         this.uploadLoading = false
+      }).catch(err => {
+        console.log(err)
+        this.uploadLoading = false
       })
     },
     removeDomain(item) {

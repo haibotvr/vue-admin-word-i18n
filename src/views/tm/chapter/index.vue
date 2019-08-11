@@ -8,6 +8,19 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         新增
       </el-button>
+      <el-upload
+        style="float:right"
+        :multiple="false"
+        :auto-upload="true"
+        :show-file-list="false"
+        :before-upload="beforeUpload"
+        :drag="false"
+        action=""
+        accept="xlsAccept:'application/vnd.ms-excel'"
+        :http-request="uploadFile"
+      >
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-upload" :loading="uploadLoading">导入单词</el-button>
+      </el-upload>
     </div>
     <el-table
       :key="tableKey"
@@ -21,7 +34,7 @@
     >
       <el-table-column align="center" label="序号" width="95">
         <template slot-scope="scope">
-          {{ scope.$index + 1 }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
       <el-table-column label="章节" align="center">
@@ -83,7 +96,7 @@
 </template>
 
 <script>
-import { createChapter, updateChapter, delChapter, selectChapter } from '@/api/chapter'
+import { createChapter, updateChapter, delChapter, selectChapter, readExcel } from '@/api/chapter'
 import Pagination from '@/components/Pagination'
 import waves from '@/directive/waves' // waves directive
 
@@ -104,6 +117,7 @@ export default {
       tableKey: 0,
       list: null,
       listLoading: true,
+      uploadLoading: false,
       total: 100,
       tmId: undefined,
       listQuery: {
@@ -139,6 +153,46 @@ export default {
     this.fetchData()
   },
   methods: {
+    // 上传文件之前的钩子
+    beforeUpload(file) {
+      // const isText = file.type === 'application/vnd.ms-excel'
+      // const isTextComputer = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      // return (isText | isTextComputer)
+      // const _this = this
+      // return new Promise(function(resolve, reject) {
+      //   const isText = file.type === 'application/vnd.ms-excel'
+      //   const isTextComputer = file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      //   if (isText | isTextComputer) {
+      //     _this.$message.error('请上传Excel文件')
+      //     debugger
+      //     reject(false)
+      //   }
+      // })
+    },
+    uploadFile(item) {
+      this.uploadLoading = true
+      const fileObj = item.file
+      const isText = fileObj.type === 'application/vnd.ms-excel'
+      const isTextComputer = fileObj.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      if (!isText & !isTextComputer) {
+        this.$message.warning('请上传Excel文件')
+        this.uploadLoading = false
+        return
+      }
+      const form = new FormData()
+      form.append('file', fileObj)
+      readExcel(form).then(response => {
+        if (response.code === 200) {
+          this.$message.success('文件：' + fileObj.name + '上传成功')
+        } else {
+          this.$message.error(response.message)
+        }
+        this.uploadLoading = false
+      }).catch(err => {
+        console.log(err)
+        this.uploadLoading = false
+      })
+    },
     fetchData() {
       this.listLoading = true
       this.params.pageNum = this.listQuery.page

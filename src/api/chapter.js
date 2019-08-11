@@ -30,3 +30,11 @@ export function selectChapter(data) {
     data
   })
 }
+
+export function readExcel(data) {
+  return request({
+    url: '/chapter/readExcel',
+    method: 'post',
+    data
+  })
+}
