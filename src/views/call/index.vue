@@ -1,0 +1,550 @@
+<template>
+  <div class="app-container">
+    <div class="filter-container">
+      <el-input v-model="listQuery.title" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        查询
+      </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
+        新增
+      </el-button>
+    </div>
+    <el-table
+      :key="tableKey"
+      v-loading="listLoading"
+      :data="list"
+      border
+      fit
+      highlight-current-row
+      style="width: 100%;"
+      @sort-change="sortChange"
+    >
+      <el-table-column align="center" label="序号" width="95">
+        <template slot-scope="scope">
+          {{ scope.$index + 1 }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" prop="create_at" label="时间" width="200">
+        <template slot-scope="scope">
+          <i class="el-icon-time" />
+          <span>{{ scope.row.dateTime }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="姓名" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.realName }}
+        </template>
+      </el-table-column>
+      <el-table-column label="性别" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.realSex }}
+        </template>
+      </el-table-column>
+      <el-table-column label="部门" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.department }}
+        </template>
+      </el-table-column>
+      <el-table-column label="职务" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.job }}
+        </template>
+      </el-table-column>
+      <el-table-column label="职务类别" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.jobCategory }}
+        </template>
+      </el-table-column>
+      <el-table-column label="区号" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.areaCode }}
+        </template>
+      </el-table-column>
+      <el-table-column label="电话" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.telephone }}
+        </template>
+      </el-table-column>
+      <el-table-column label="分机号" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.extensionNumber }}
+        </template>
+      </el-table-column>
+      <el-table-column label="区号2" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.areaCode2 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="电话2" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.telephone2 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="分机号2" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.extensionNumber2 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="手机号" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.phone }}
+        </template>
+      </el-table-column>
+      <el-table-column label="手机号2" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.phone2 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="公司名称" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.companyName }}
+        </template>
+      </el-table-column>
+      <el-table-column label="关键字" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.keywords }}
+        </template>
+      </el-table-column>
+      <el-table-column label="省份" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.province }}
+        </template>
+      </el-table-column>
+      <el-table-column label="城市" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.city }}
+        </template>
+      </el-table-column>
+      <el-table-column label="地址" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.address }}
+        </template>
+      </el-table-column>
+      <el-table-column label="邮编" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.postCode }}
+        </template>
+      </el-table-column>
+      <el-table-column label="行业" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.industry }}
+        </template>
+      </el-table-column>
+      <el-table-column label="行业(新)" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.industryNew }}
+        </template>
+      </el-table-column>
+      <el-table-column label="细分行业" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.industryDetail }}
+        </template>
+      </el-table-column>
+      <el-table-column label="企业性质" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.companyNature }}
+        </template>
+      </el-table-column>
+      <el-table-column label="公司人数" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.companyPersonNumber }}
+        </template>
+      </el-table-column>
+      <el-table-column label="PC数量" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.pcNumber }}
+        </template>
+      </el-table-column>
+      <el-table-column label="年营业额" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.annualTurnover }}
+        </template>
+      </el-table-column>
+      <el-table-column label="传真1" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.fax1 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="传真2" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.fax2 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="来源人" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.fromPerson }}
+        </template>
+      </el-table-column>
+      <el-table-column label="数据来源" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.dataFrom }}
+        </template>
+      </el-table-column>
+      <el-table-column label="状态" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.status }}
+        </template>
+      </el-table-column>
+      <el-table-column label="邮箱1" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.email1 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="邮箱2" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.email2 }}
+        </template>
+      </el-table-column>
+      <el-table-column label="备注" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.remark }}
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="350" class-name="small-padding fixed-width">
+        <template slot-scope="{row}">
+          <el-button v-if="row.ewStatus!=0" size="mini" type="primary" @click="handleUpdate(row)">
+            编辑
+          </el-button>
+          <!-- <el-button v-if="row.ewStatus!=0" size="mini" type="danger" @click="handleDelete(row.id)">
+            删除
+          </el-button> -->
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchData" />
+
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+        <el-form-item label="姓名" prop="realName">
+          <el-input v-model="temp.realName" />
+        </el-form-item>
+        <el-form-item label="性别" prop="realSex">
+          <el-input v-model="temp.realSex" />
+        </el-form-item>
+        <el-form-item label="部门" prop="department">
+          <el-input v-model="temp.department" />
+        </el-form-item>
+        <el-form-item label="职务" prop="job">
+          <el-input v-model="temp.job" />
+        </el-form-item>
+        <el-form-item label="职务类别" prop="jobCategory">
+          <el-input v-model="temp.jobCategory" />
+        </el-form-item>
+        <el-form-item label="区号" prop="areaCode">
+          <el-input v-model="temp.areaCode" />
+        </el-form-item>
+        <el-form-item label="电话" prop="telephone">
+          <el-input v-model="temp.telephone" />
+        </el-form-item>
+        <el-form-item label="分机号" prop="extensionNumber">
+          <el-input v-model="temp.extensionNumber" />
+        </el-form-item>
+        <el-form-item label="区号2" prop="areaCode2">
+          <el-input v-model="temp.areaCode2" />
+        </el-form-item>
+        <el-form-item label="电话2" prop="telephone2">
+          <el-input v-model="temp.telephone2" />
+        </el-form-item>
+        <el-form-item label="分机号2" prop="extensionNumber2">
+          <el-input v-model="temp.extensionNumber2" />
+        </el-form-item>
+        <el-form-item label="手机号" prop="phone">
+          <el-input v-model="temp.phone" />
+        </el-form-item>
+        <el-form-item label="手机号2" prop="phone2">
+          <el-input v-model="temp.phone2" />
+        </el-form-item>
+        <el-form-item label="公司名称" prop="companyName">
+          <el-input v-model="temp.companyName" />
+        </el-form-item>
+        <el-form-item label="关键字" prop="keywords">
+          <el-input v-model="temp.keywords" />
+        </el-form-item>
+        <el-form-item label="省份" prop="province">
+          <el-input v-model="temp.province" />
+        </el-form-item>
+        <el-form-item label="城市" prop="city">
+          <el-input v-model="temp.city" />
+        </el-form-item>
+        <el-form-item label="地址" prop="address">
+          <el-input v-model="temp.address" />
+        </el-form-item>
+        <el-form-item label="邮编" prop="postCode">
+          <el-input v-model="temp.postCode" />
+        </el-form-item>
+        <el-form-item label="行业" prop="industry">
+          <el-input v-model="temp.industry" />
+        </el-form-item>
+        <el-form-item label="行业(新)" prop="industryNew">
+          <el-input v-model="temp.industryNew" />
+        </el-form-item>
+        <el-form-item label="细分行业" prop="industryDetail">
+          <el-input v-model="temp.industryDetail" />
+        </el-form-item>
+        <el-form-item label="企业性质" prop="companyNature">
+          <el-input v-model="temp.companyNature" />
+        </el-form-item>
+        <el-form-item label="公司人数" prop="companyPersonNumber">
+          <el-input v-model="temp.companyPersonNumber" />
+        </el-form-item>
+        <el-form-item label="PC数量" prop="pcNumber">
+          <el-input v-model="temp.pcNumber" />
+        </el-form-item>
+        <el-form-item label="年营业额" prop="annualTurnover">
+          <el-input v-model="temp.annualTurnover" />
+        </el-form-item>
+        <el-form-item label="传真1" prop="fax1">
+          <el-input v-model="temp.fax1" />
+        </el-form-item>
+        <el-form-item label="传真2" prop="fax2">
+          <el-input v-model="temp.fax2" />
+        </el-form-item>
+        <el-form-item label="来源人" prop="fromPerson">
+          <el-input v-model="temp.fromPerson" />
+        </el-form-item>
+        <el-form-item label="数据来源" prop="dataFrom">
+          <el-input v-model="temp.dataFrom" />
+        </el-form-item>
+        <el-form-item label="状态" prop="status">
+          <el-input v-model="temp.status" />
+        </el-form-item>
+        <el-form-item label="邮箱1" prop="email1">
+          <el-input v-model="temp.email1" />
+        </el-form-item>
+        <el-form-item label="邮箱2" prop="email2">
+          <el-input v-model="temp.email2" />
+        </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="temp.remark" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">
+          取消
+        </el-button>
+        <el-button type="primary" @click="dialogStatus==='create'?createData():updateData()">
+          确定
+        </el-button>
+      </div>
+    </el-dialog>
+
+  </div>
+</template>
+
+<script>
+import { createCall, updateCall, delCall, selectCall } from '@/api/call'
+import Pagination from '@/components/Pagination'
+import waves from '@/directive/waves' // waves directive
+
+export default {
+  components: { Pagination },
+  directives: { waves },
+  filters: {
+    statusFilter(status) {
+      const statusMap = {
+        1: 'success',
+        0: 'danger'
+      }
+      return statusMap[status]
+    }
+  },
+  data() {
+    return {
+      tableKey: 0,
+      list: null,
+      listLoading: true,
+      total: 100,
+      listQuery: {
+        page: 1,
+        limit: 10,
+        title: '',
+        sort: '+id'
+      },
+      params: {
+        pageNum: 1,
+        pageSize: 10,
+        realName: ''
+      },
+      temp: {
+        id: undefined,
+        realName: '',
+        realSex: '',
+        department: '',
+        job: '',
+        jobCategory: '',
+        areaCode: '',
+        telephone: '',
+        extensionNumber: '',
+        areaCode2: '',
+        telephone2: '',
+        extensionNumber2: '',
+        phone: '',
+        phone2: '',
+        companyName: '',
+        keywords: '',
+        province: '',
+        city: '',
+        address: '',
+        postCode: '',
+        industry: '',
+        industryNew: '',
+        industryDetail: '',
+        companyNature: '',
+        companyPersonNumber: '',
+        pcNumber: '',
+        annualTurnover: '',
+        fax1: '',
+        fax2: '',
+        fromPerson: '',
+        dataFrom: '',
+        dataStatus: '',
+        email1: '',
+        email2: '',
+        remark: ''
+      },
+      dialogFormVisible: false,
+      dialogStatus: '',
+      textMap: {
+        update: '编辑',
+        create: '新增'
+      },
+      rules: {
+        realName: [{ required: true, message: '请填写姓名', trigger: 'blur' }]
+      }
+    }
+  },
+  created() {
+    this.fetchData()
+  },
+  methods: {
+    fetchData() {
+      this.listLoading = true
+      this.params.pageNum = this.listQuery.page
+      this.params.pageSize = this.listQuery.limit
+      this.params.realName = this.listQuery.title
+      selectCall(this.params).then(response => {
+        this.list = response.data.list
+        this.total = response.data.total
+        this.listLoading = false
+      })
+    },
+    resetTemp() {
+      this.temp = {
+        id: undefined,
+        realName: '',
+        realSex: '',
+        department: '',
+        job: '',
+        jobCategory: '',
+        areaCode: '',
+        telephone: '',
+        extensionNumber: '',
+        areaCode2: '',
+        telephone2: '',
+        extensionNumber2: '',
+        phone: '',
+        phone2: '',
+        companyName: '',
+        keywords: '',
+        province: '',
+        city: '',
+        address: '',
+        postCode: '',
+        industry: '',
+        industryNew: '',
+        industryDetail: '',
+        companyNature: '',
+        companyPersonNumber: '',
+        pcNumber: '',
+        annualTurnover: '',
+        fax1: '',
+        fax2: '',
+        fromPerson: '',
+        dataFrom: '',
+        dataStatus: '',
+        email1: '',
+        email2: '',
+        remark: ''
+      }
+    },
+    sortChange(data) {
+      const { prop, order } = data
+      if (prop === 'id') {
+        this.sortByID(order)
+      }
+    },
+    sortByID(order) {
+      if (order === 'ascending') {
+        this.listQuery.sort = '+id'
+      } else {
+        this.listQuery.sort = '-id'
+      }
+      this.handleFilter()
+    },
+    handleFilter() {
+      this.listQuery.page = 1
+      this.fetchData()
+    },
+    handleCreate() {
+      this.resetTemp()
+      this.dialogStatus = 'create'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    createData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          createCall(this.temp).then(response => {
+            this.resetTemp()
+            this.fetchData()
+            this.dialogFormVisible = false
+          })
+        }
+      })
+    },
+    handleUpdate(row) {
+      this.temp = Object.assign({}, row) // copy obj
+      this.temp.id = row.id
+      this.dialogStatus = 'update'
+      this.dialogFormVisible = true
+      this.$nextTick(() => {
+        this.$refs['dataForm'].clearValidate()
+      })
+    },
+    updateData() {
+      this.$refs['dataForm'].validate((valid) => {
+        if (valid) {
+          updateCall(this.temp).then(response => {
+            this.resetTemp()
+            this.fetchData()
+            this.dialogFormVisible = false
+          })
+        }
+      })
+    },
+    handleDelete(id) {
+      this.$confirm('此操作将永久删除该数据, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delCall(id).then(response => {
+          this.fetchData()
+          this.$message({
+            type: 'success',
+            message: '删除成功!'
+          })
+        })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    }
+  }
+}
+</script>
