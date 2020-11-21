@@ -182,6 +182,31 @@ export const asyncRoutes = [
     ]
   },
   {
+    path: '/call',
+    component: Layout,
+    redirect: '/call/member',
+    name: '呼叫中心',
+    meta: {
+      title: '呼叫中心',
+      icon: 'guide',
+      roles: ['call']
+    },
+    children: [
+      {
+        path: 'member',
+        component: () => import('@/views/call/member/index'),
+        name: '人员信息',
+        meta: { title: '人员信息' }
+      },
+      {
+        path: 'other',
+        component: () => import('@/views/call/other/index'),
+        name: '其它',
+        meta: { title: '其它' }
+      }
+    ]
+  },
+  {
     path: '/study',
     component: Layout,
     redirect: '/study/tm',

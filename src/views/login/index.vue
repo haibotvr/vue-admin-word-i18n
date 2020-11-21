@@ -77,6 +77,12 @@
       <br>
       <social-sign />
     </el-dialog>
+
+    <div class="show-office">
+      <span @click="handleOffice">
+        京ICP备19029487号-1
+      </span>
+    </div>
   </div>
 </template>
 
@@ -185,6 +191,9 @@ export default {
           return false
         }
       })
+    },
+    handleOffice() {
+      window.location.href = 'http://www.beian.miit.gov.cn/'
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
@@ -329,6 +338,18 @@ $light_gray:#eee;
     right: 10px;
     top: 7px;
     font-size: 16px;
+    color: $dark_gray;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .show-office {
+    position: absolute;
+    left:50%;
+    -webkit-transform: translate(-50%,-50%);
+    -moz-transform: translate(-50%,-50%);
+    transform:translate(-50%,-50%);
+    bottom: 30px;
     color: $dark_gray;
     cursor: pointer;
     user-select: none;
