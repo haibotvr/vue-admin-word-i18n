@@ -1,12 +1,31 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="listQuery.title" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleRealName" placeholder="姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleRealSex" placeholder="性别" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleJob" placeholder="职务" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleJobCategory" placeholder="职务类别" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titlePhone" placeholder="手机" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titlePhone2" placeholder="手机2" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleCompanyName" placeholder="公司名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleKeywords" placeholder="关键字" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleProvince" placeholder="省份" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleCity" placeholder="城市" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleIndustry" placeholder="行业" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleIndustryNew" placeholder="行业（新）" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleIndustryDetail" placeholder="细分行业" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleFromPerson" placeholder="来源人" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleDataFrom" placeholder="数据来源" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleDataStatus" placeholder="状态" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleRemark" placeholder="备注" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit" @click="handleCreate">
         新增
+      </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="resetQuery">
+        重置
       </el-button>
     </div>
     <el-table
@@ -19,15 +38,15 @@
       style="width: 100%;"
       @sort-change="sortChange"
     >
-      <el-table-column align="center" label="序号" width="95">
+      <el-table-column align="center" label="序号">
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="create_at" label="时间" width="200">
+      <el-table-column align="center" prop="create_at" label="时间" width="180">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          <span>{{ scope.row.dateTime }}</span>
+          <span>{{ scope.row.dataTime }}</span>
         </template>
       </el-table-column>
       <el-table-column label="姓名" align="center">
@@ -40,107 +59,107 @@
           {{ scope.row.realSex }}
         </template>
       </el-table-column>
-      <el-table-column label="部门" align="center">
+      <el-table-column label="部门" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.department }}
         </template>
       </el-table-column>
-      <el-table-column label="职务" align="center">
+      <el-table-column label="职务" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.job }}
         </template>
       </el-table-column>
-      <el-table-column label="职务类别" align="center">
+      <el-table-column label="职务类别" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.jobCategory }}
         </template>
       </el-table-column>
-      <el-table-column label="区号" align="center">
+      <el-table-column label="区号" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.areaCode }}
         </template>
       </el-table-column>
-      <el-table-column label="电话" align="center">
+      <el-table-column label="电话" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.telephone }}
         </template>
       </el-table-column>
-      <el-table-column label="分机号" align="center">
+      <el-table-column label="分机号" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.extensionNumber }}
         </template>
       </el-table-column>
-      <el-table-column label="区号2" align="center">
+      <el-table-column label="区号2" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.areaCode2 }}
         </template>
       </el-table-column>
-      <el-table-column label="电话2" align="center">
+      <el-table-column label="电话2" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.telephone2 }}
         </template>
       </el-table-column>
-      <el-table-column label="分机号2" align="center">
+      <el-table-column label="分机号2" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.extensionNumber2 }}
         </template>
       </el-table-column>
-      <el-table-column label="手机号" align="center">
+      <el-table-column label="手机号" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.phone }}
         </template>
       </el-table-column>
-      <el-table-column label="手机号2" align="center">
+      <el-table-column label="手机号2" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.phone2 }}
         </template>
       </el-table-column>
-      <el-table-column label="公司名称" align="center">
+      <el-table-column label="公司名称" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.companyName }}
         </template>
       </el-table-column>
-      <el-table-column label="关键字" align="center">
+      <el-table-column label="关键字" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.keywords }}
         </template>
       </el-table-column>
-      <el-table-column label="省份" align="center">
+      <el-table-column label="省份" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.province }}
         </template>
       </el-table-column>
-      <el-table-column label="城市" align="center">
+      <el-table-column label="城市" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.city }}
         </template>
       </el-table-column>
-      <el-table-column label="地址" align="center">
+      <el-table-column label="地址" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.address }}
         </template>
       </el-table-column>
-      <el-table-column label="邮编" align="center">
+      <el-table-column label="邮编" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.postCode }}
         </template>
       </el-table-column>
-      <el-table-column label="行业" align="center">
+      <el-table-column label="行业" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.industry }}
         </template>
       </el-table-column>
-      <el-table-column label="行业(新)" align="center">
+      <el-table-column label="行业(新)" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.industryNew }}
         </template>
       </el-table-column>
-      <el-table-column label="细分行业" align="center">
+      <el-table-column label="细分行业" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.industryDetail }}
         </template>
       </el-table-column>
-      <el-table-column label="企业性质" align="center">
+      <el-table-column label="企业性质" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.companyNature }}
         </template>
@@ -160,62 +179,59 @@
           {{ scope.row.annualTurnover }}
         </template>
       </el-table-column>
-      <el-table-column label="传真1" align="center">
+      <el-table-column label="传真1" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.fax1 }}
         </template>
       </el-table-column>
-      <el-table-column label="传真2" align="center">
+      <el-table-column label="传真2" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.fax2 }}
         </template>
       </el-table-column>
-      <el-table-column label="来源人" align="center">
+      <el-table-column label="来源人" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.fromPerson }}
         </template>
       </el-table-column>
-      <el-table-column label="数据来源" align="center">
+      <el-table-column label="数据来源" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.dataFrom }}
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center">
+      <el-table-column label="状态" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.status }}
         </template>
       </el-table-column>
-      <el-table-column label="邮箱1" align="center">
+      <el-table-column label="邮箱1" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.email1 }}
         </template>
       </el-table-column>
-      <el-table-column label="邮箱2" align="center">
+      <el-table-column label="邮箱2" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.email2 }}
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center">
+      <el-table-column label="备注" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.remark }}
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" width="350" class-name="small-padding fixed-width">
+      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right">
         <template slot-scope="{row}">
-          <el-button v-if="row.ewStatus!=0" size="mini" type="primary" @click="handleUpdate(row)">
+          <el-button size="mini" type="primary" @click="handleUpdate(row)">
             编辑
           </el-button>
-          <!-- <el-button v-if="row.ewStatus!=0" size="mini" type="danger" @click="handleDelete(row.id)">
-            删除
-          </el-button> -->
         </template>
       </el-table-column>
     </el-table>
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchData" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible">
-      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 400px; margin-left:50px;">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="40%">
+      <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 500px; margin-left:50px;">
         <el-form-item label="姓名" prop="realName">
           <el-input v-model="temp.realName" />
         </el-form-item>
@@ -359,13 +375,45 @@ export default {
       listQuery: {
         page: 1,
         limit: 10,
-        title: '',
+        titleRealName: '',
+        titleRealSex: '',
+        titleJob: '',
+        titleJobCategory: '',
+        titlePhone: '',
+        titlePhone2: '',
+        titleCompanyName: '',
+        titleKeywords: '',
+        titleProvince: '',
+        titleCity: '',
+        titleIndustry: '',
+        titleIndustryNew: '',
+        titleIndustryDetail: '',
+        titleDataFrom: '',
+        titleFromPerson: '',
+        titleDataStatus: '',
+        titleRemark: '',
         sort: '+id'
       },
       params: {
         pageNum: 1,
         pageSize: 10,
-        realName: ''
+        realName: '',
+        realSex: '',
+        job: '',
+        jobCategory: '',
+        phone: '',
+        phone2: '',
+        companyName: '',
+        keywords: '',
+        province: '',
+        city: '',
+        industry: '',
+        industryNew: '',
+        industryDetail: '',
+        datafrom: '',
+        fromPerson: '',
+        dataStatus: '',
+        remark: ''
       },
       temp: {
         id: undefined,
@@ -423,12 +471,52 @@ export default {
       this.listLoading = true
       this.params.pageNum = this.listQuery.page
       this.params.pageSize = this.listQuery.limit
-      this.params.realName = this.listQuery.title
+      this.params.realName = this.listQuery.titleRealName
+      this.params.realSex = this.listQuery.titleRealSex
+      this.params.job = this.listQuery.titleJob
+      this.params.jobCategory = this.listQuery.titleJobCategory
+      this.params.phone = this.listQuery.titlePhone
+      this.params.phone2 = this.listQuery.titlePhone2
+      this.params.companyName = this.listQuery.titleCompanyName
+      this.params.keywords = this.listQuery.titleKeywords
+      this.params.province = this.listQuery.titleProvince
+      this.params.city = this.listQuery.titleCity
+      this.params.industry = this.listQuery.titleIndustry
+      this.params.industryNew = this.listQuery.titleIndustryNew
+      this.params.industryDetail = this.listQuery.titleIndustryDetail
+      this.params.datafrom = this.listQuery.titleDataFrom
+      this.params.fromPerson = this.listQuery.titleFromPerson
+      this.params.dataStatus = this.listQuery.titleDataStatus
+      this.params.remark = this.listQuery.titleRemark
       selectCall(this.params).then(response => {
         this.list = response.data.list
         this.total = response.data.total
         this.listLoading = false
       })
+    },
+    resetQuery() {
+      this.listQuery = {
+        page: 1,
+        limit: 10,
+        titleRealName: '',
+        titleRealSex: '',
+        titleJob: '',
+        titleJobCategory: '',
+        titlePhone: '',
+        titlePhone2: '',
+        titleCompanyName: '',
+        titleKeywords: '',
+        titleProvince: '',
+        titleCity: '',
+        titleIndustry: '',
+        titleIndustryNew: '',
+        titleIndustryDetail: '',
+        titleDataFrom: '',
+        titleFromPerson: '',
+        titleDataStatus: '',
+        titleRemark: '',
+        sort: '+id'
+      }
     },
     resetTemp() {
       this.temp = {
@@ -591,3 +679,10 @@ export default {
   }
 }
 </script>
+<style scoped>
+.cell {
+  max-height: 23px;
+  overflow: hidden;
+}
+</style>
+
