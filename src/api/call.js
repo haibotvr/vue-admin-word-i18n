@@ -30,3 +30,27 @@ export function selectCall(data) {
     data
   })
 }
+
+export function importContacts(data) {
+  return request({
+    url: '/call/importContacts',
+    method: 'post',
+    data
+  })
+}
+
+export function exportContacts(data) {
+  return request({
+    url: '/call/exportContacts',
+    method: 'post',
+    data
+  })
+}
+
+export function exportTargetContacts(data) {
+  return request({
+    url: '/call/exportTargetContacts',
+    method: 'post',
+    data
+  })
+}

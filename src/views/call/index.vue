@@ -333,7 +333,8 @@
 </template>
 
 <script>
-import { createCall, updateCall, delCall, selectCall } from '@/api/call'
+import { createCall, updateCall, delCall, selectCall, importContacts, exportContacts, exportTargetContacts } from '@/api/call'
+import { parseTime } from '@/utils'
 import Pagination from '@/components/Pagination'
 import waves from '@/directive/waves' // waves directive
 
@@ -544,6 +545,48 @@ export default {
           message: '已取消删除'
         })
       })
+    },
+    handleDownload() {
+      importContacts().then(response => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      })
+      exportContacts().then(response => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      })
+      exportTargetContacts().then(response => {
+        this.$message({
+          type: 'success',
+          message: '删除成功!'
+        })
+      })
+      import('@/vendor/Export2Excel').then(excel => {
+        const tHeader = ['姓名', '性别', '部门', '职务', '职务类别', '区号', '电话', '分机号', '区号2', '电话2', '分机号2', '手机号', '手机号2', '公司名称', '关键字', '省份', '城市', '地址', '邮编', '行业', '行业(新)', '细分行业', '企业性质', '公司人数', 'PC数量', '年营业额', '传真1', '传真2', '数据日期', '来源人', '数据来源', '状态', '邮箱1', '邮箱2', '备注']
+        const filterVal = ['realName', 'realSex', 'department', 'job', 'jobCategory', 'areaCode', 'telephone', 'extensionNumber', 'areaCode2', 'telephone2', 'extensionNumber2', 'phone', 'phone2', 'companyName', 'keywords', 'province', 'city', 'address', 'postCode', 'industry', 'industryNew', 'industryDetail', 'companyNature', 'companyPersonNumber', 'pcNumber', 'annualTurnover', 'fax1', 'fax2', 'dataTime', 'fromPerson', 'dataFrom', 'dataStatus', 'email1', 'email2', 'remark']
+        const list = this.list
+        const data = this.formatJson(filterVal, list)
+        excel.export_json_to_excel({
+          header: tHeader,
+          data,
+          filename: this.filename,
+          autoWidth: this.autoWidth,
+          bookType: this.bookType
+        })
+      })
+    },
+    formatJson(filterVal, jsonData) {
+      return jsonData.map(v => filterVal.map(j => {
+        if (j === 'timestamp') {
+          return parseTime(v[j])
+        } else {
+          return v[j]
+        }
+      }))
     }
   }
 }
