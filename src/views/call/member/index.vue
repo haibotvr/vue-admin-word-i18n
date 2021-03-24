@@ -18,6 +18,7 @@
       <el-input v-model="listQuery.titleDataFrom" placeholder="数据来源" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.titleDataStatus" placeholder="状态" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.titleRemark" placeholder="备注" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <br>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
       </el-button>
@@ -27,6 +28,33 @@
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-refresh" @click="resetQuery">
         重置
       </el-button>
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-download" @click="handleExport">
+        导出
+      </el-button>
+      <el-upload
+        style="float:right"
+        :multiple="false"
+        :auto-upload="true"
+        :show-file-list="false"
+        :drag="false"
+        action=""
+        accept="xlsAccept:'application/vnd.ms-excel'"
+        :http-request="handleTarget"
+      >
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-upload" :loading="uploadLoading">公司批量匹配</el-button>
+      </el-upload>
+      <el-upload
+        style="float:right"
+        :multiple="false"
+        :auto-upload="true"
+        :show-file-list="false"
+        :drag="false"
+        action=""
+        accept="xlsAccept:'application/vnd.ms-excel'"
+        :http-request="uploadFile"
+      >
+        <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-upload" :loading="uploadLoading">信息上传与更新</el-button>
+      </el-upload>
     </div>
     <el-table
       :key="tableKey"
@@ -371,6 +399,7 @@ export default {
       tableKey: 0,
       list: null,
       listLoading: true,
+      uploadLoading: false,
       total: 100,
       listQuery: {
         page: 1,
@@ -634,29 +663,85 @@ export default {
         })
       })
     },
-    handleDownload() {
-      importContacts().then(response => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+    uploadFile(item) {
+      this.uploadLoading = true
+      const fileObj = item.file
+      const isText = fileObj.type === 'application/vnd.ms-excel'
+      const isTextComputer = fileObj.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      if (!isText & !isTextComputer) {
+        this.$message.warning('请上传Excel文件')
+        this.uploadLoading = false
+        return
+      }
+      const form = new FormData()
+      form.append('file', fileObj)
+      importContacts(form).then(response => {
+        if (response.code === 200) {
+          this.$message.success('文件：' + fileObj.name + '上传成功')
+        } else {
+          this.$message.error(response.message)
+        }
+        this.uploadLoading = false
+      }).catch(err => {
+        console.log(err)
+        this.uploadLoading = false
       })
-      exportContacts().then(response => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+    },
+    handleTarget(item) {
+      this.uploadLoading = true
+      const fileObj = item.file
+      const isText = fileObj.type === 'application/vnd.ms-excel'
+      const isTextComputer = fileObj.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      if (!isText & !isTextComputer) {
+        this.$message.warning('请上传Excel文件')
+        this.uploadLoading = false
+        return
+      }
+      const form = new FormData()
+      form.append('file', fileObj)
+      exportTargetContacts(form).then(response => {
+        if (response.code === 200) {
+          this.handleDownload(response.data)
+        } else {
+          this.$message.error(response.message)
+        }
+        this.uploadLoading = false
+      }).catch(err => {
+        console.log(err)
+        this.uploadLoading = false
       })
-      exportTargetContacts().then(response => {
-        this.$message({
-          type: 'success',
-          message: '删除成功!'
-        })
+    },
+    handleExport() {
+      this.listLoading = true
+      this.params.pageNum = this.listQuery.page
+      this.params.pageSize = this.listQuery.limit
+      this.params.realName = this.listQuery.titleRealName
+      this.params.realSex = this.listQuery.titleRealSex
+      this.params.job = this.listQuery.titleJob
+      this.params.jobCategory = this.listQuery.titleJobCategory
+      this.params.phone = this.listQuery.titlePhone
+      this.params.phone2 = this.listQuery.titlePhone2
+      this.params.companyName = this.listQuery.titleCompanyName
+      this.params.keywords = this.listQuery.titleKeywords
+      this.params.province = this.listQuery.titleProvince
+      this.params.city = this.listQuery.titleCity
+      this.params.industry = this.listQuery.titleIndustry
+      this.params.industryNew = this.listQuery.titleIndustryNew
+      this.params.industryDetail = this.listQuery.titleIndustryDetail
+      this.params.datafrom = this.listQuery.titleDataFrom
+      this.params.fromPerson = this.listQuery.titleFromPerson
+      this.params.dataStatus = this.listQuery.titleDataStatus
+      this.params.remark = this.listQuery.titleRemark
+      exportContacts(this.params).then(response => {
+        this.handleDownload(response.data)
+        this.listLoading = false
       })
+    },
+    handleDownload(params) {
       import('@/vendor/Export2Excel').then(excel => {
         const tHeader = ['姓名', '性别', '部门', '职务', '职务类别', '区号', '电话', '分机号', '区号2', '电话2', '分机号2', '手机号', '手机号2', '公司名称', '关键字', '省份', '城市', '地址', '邮编', '行业', '行业(新)', '细分行业', '企业性质', '公司人数', 'PC数量', '年营业额', '传真1', '传真2', '数据日期', '来源人', '数据来源', '状态', '邮箱1', '邮箱2', '备注']
         const filterVal = ['realName', 'realSex', 'department', 'job', 'jobCategory', 'areaCode', 'telephone', 'extensionNumber', 'areaCode2', 'telephone2', 'extensionNumber2', 'phone', 'phone2', 'companyName', 'keywords', 'province', 'city', 'address', 'postCode', 'industry', 'industryNew', 'industryDetail', 'companyNature', 'companyPersonNumber', 'pcNumber', 'annualTurnover', 'fax1', 'fax2', 'dataTime', 'fromPerson', 'dataFrom', 'dataStatus', 'email1', 'email2', 'remark']
-        const list = this.list
+        const list = params
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
           header: tHeader,
