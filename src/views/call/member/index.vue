@@ -75,7 +75,7 @@
       fit
       highlight-current-row
       style="width: 100%;"
-      height="500"
+      height="1000"
       @sort-change="sortChange"
     >
       <el-table-column align="center" label="序号" fixed>
@@ -89,7 +89,7 @@
           <span>{{ scope.row.dataTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" align="center">
+      <el-table-column label="姓名" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.realName }}
         </template>
@@ -214,7 +214,7 @@
           {{ scope.row.pcNumber }}
         </template>
       </el-table-column>
-      <el-table-column label="年营业额" align="center">
+      <el-table-column label="年营业额" align="center" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           {{ scope.row.annualTurnover }}
         </template>
@@ -450,7 +450,7 @@ export default {
       total: 100,
       listQuery: {
         page: 1,
-        limit: 20,
+        limit: 50,
         titleRealName: '',
         titleRealSex: '',
         titleJob: '',
@@ -480,7 +480,7 @@ export default {
       },
       params: {
         pageNum: 1,
-        pageSize: 20,
+        pageSize: 50,
         realName: '',
         realSex: '',
         job: '',
