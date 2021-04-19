@@ -18,6 +18,17 @@
       <el-input v-model="listQuery.titleDataFrom" placeholder="数据来源" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.titleDataStatus" placeholder="状态" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
       <el-input v-model="listQuery.titleRemark" placeholder="备注" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleIndustryAi" placeholder="是否AI行业" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleOfficeEmail" placeholder="企业邮箱" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleDepartment" placeholder="部门" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleCompanyPersonNumber" placeholder="公司人数" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titlePcNumber" placeholder="PC数量" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleAnnualTurnover" placeholder="营业额" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.titleRegCapital" placeholder="注册资本" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-select v-model="listQuery.titleHaveOfficeEmail" placeholder="请选择是否有企业邮箱" style="width: 200px;" class="filter-item">
+        <el-option label="是" value="Y" />
+        <el-option label="否" value="N" />
+      </el-select>
       <br>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
         查询
@@ -64,9 +75,10 @@
       fit
       highlight-current-row
       style="width: 100%;"
+      height="500"
       @sort-change="sortChange"
     >
-      <el-table-column align="center" label="序号">
+      <el-table-column align="center" label="序号" fixed>
         <template slot-scope="scope">
           {{ scope.$index + 1 }}
         </template>
@@ -247,6 +259,26 @@
           {{ scope.row.remark }}
         </template>
       </el-table-column>
+      <el-table-column label="是否AI行业" align="center" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          {{ scope.row.industryAi }}
+        </template>
+      </el-table-column>
+      <el-table-column label="企业邮箱" align="center" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          {{ scope.row.officeEmail }}
+        </template>
+      </el-table-column>
+      <el-table-column label="数据更新时间" align="center" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          {{ scope.row.updateTime }}
+        </template>
+      </el-table-column>
+      <el-table-column label="注册资本" align="center" :show-overflow-tooltip="true">
+        <template slot-scope="scope">
+          {{ scope.row.regCapital }}
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" fixed="right">
         <template slot-scope="{row}">
           <el-button size="mini" type="primary" @click="handleUpdate(row)">
@@ -258,7 +290,7 @@
 
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="fetchData" />
 
-    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="40%">
+    <el-dialog :title="textMap[dialogStatus]" :visible.sync="dialogFormVisible" width="50%">
       <el-form ref="dataForm" :rules="rules" :model="temp" label-position="left" label-width="100px" style="width: 500px; margin-left:50px;">
         <el-form-item label="姓名" prop="realName">
           <el-input v-model="temp.realName" />
@@ -362,6 +394,21 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="temp.remark" />
         </el-form-item>
+        <el-form-item label="备注" prop="remark">
+          <el-input v-model="temp.remark" />
+        </el-form-item>
+        <el-form-item label="是否AI行业" prop="industryAi">
+          <el-input v-model="temp.industryAi" />
+        </el-form-item>
+        <el-form-item label="企业邮箱" prop="officeEmail">
+          <el-input v-model="temp.officeEmail" />
+        </el-form-item>
+        <el-form-item label="数据更新时间" prop="updateTime">
+          <el-input v-model="temp.updateTime" />
+        </el-form-item>
+        <el-form-item label="注册资本" prop="regCapital">
+          <el-input v-model="temp.regCapital" />
+        </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">
@@ -403,7 +450,7 @@ export default {
       total: 100,
       listQuery: {
         page: 1,
-        limit: 10,
+        limit: 20,
         titleRealName: '',
         titleRealSex: '',
         titleJob: '',
@@ -421,11 +468,19 @@ export default {
         titleFromPerson: '',
         titleDataStatus: '',
         titleRemark: '',
+        titleIndustryAi: '',
+        titleOfficeEmail: '',
+        titleDepartment: '',
+        titleCompanyPersonNumber: '',
+        titlePcNumber: '',
+        titleRegCapital: '',
+        titleAnnualTurnover: '',
+        titleHaveOfficeEmail: '',
         sort: '+id'
       },
       params: {
         pageNum: 1,
-        pageSize: 10,
+        pageSize: 20,
         realName: '',
         realSex: '',
         job: '',
@@ -442,7 +497,15 @@ export default {
         datafrom: '',
         fromPerson: '',
         dataStatus: '',
-        remark: ''
+        remark: '',
+        industryAi: '',
+        officeEmail: '',
+        department: '',
+        companyPersonNumber: '',
+        pcNumber: '',
+        regCapital: '',
+        annualTurnover: '',
+        haveOfficeEmail: ''
       },
       temp: {
         id: undefined,
@@ -479,7 +542,10 @@ export default {
         dataStatus: '',
         email1: '',
         email2: '',
-        remark: ''
+        remark: '',
+        industryAi: '',
+        officeEmail: '',
+        regCapital: ''
       },
       dialogFormVisible: false,
       dialogStatus: '',
@@ -517,6 +583,14 @@ export default {
       this.params.fromPerson = this.listQuery.titleFromPerson
       this.params.dataStatus = this.listQuery.titleDataStatus
       this.params.remark = this.listQuery.titleRemark
+      this.params.industryAi = this.listQuery.titleIndustryAi
+      this.params.officeEmail = this.listQuery.titleOfficeEmail
+      this.params.pcNumber = this.listQuery.titlePcNumber
+      this.params.companyPersonNumber = this.listQuery.titleCompanyPersonNumber
+      this.params.department = this.listQuery.titleDepartment
+      this.params.annualTurnover = this.listQuery.titleAnnualTurnover
+      this.params.regCapital = this.listQuery.titleRegCapital
+      this.params.haveOfficeEmail = this.listQuery.titleHaveOfficeEmail
       selectCall(this.params).then(response => {
         this.list = response.data.list
         this.total = response.data.total
@@ -544,6 +618,14 @@ export default {
         titleFromPerson: '',
         titleDataStatus: '',
         titleRemark: '',
+        titleIndustryAi: '',
+        titleOfficeEmail: '',
+        titleDepartment: '',
+        titlePcNumber: '',
+        titleCompanyPersonNumber: '',
+        titleRegCapital: '',
+        titleAnnualTurnover: '',
+        titleHaveOfficeEmail: '',
         sort: '+id'
       }
     },
@@ -583,7 +665,10 @@ export default {
         dataStatus: '',
         email1: '',
         email2: '',
-        remark: ''
+        remark: '',
+        industryAi: '',
+        officeEmail: '',
+        regCapital: ''
       }
     },
     sortChange(data) {
@@ -732,6 +817,14 @@ export default {
       this.params.fromPerson = this.listQuery.titleFromPerson
       this.params.dataStatus = this.listQuery.titleDataStatus
       this.params.remark = this.listQuery.titleRemark
+      this.params.industryAi = this.listQuery.titleIndustryAi
+      this.params.officeEmail = this.listQuery.titleOfficeEmail
+      this.params.pcNumber = this.listQuery.titlePcNumber
+      this.params.companyPersonNumber = this.listQuery.titleCompanyPersonNumber
+      this.params.department = this.listQuery.titleDepartment
+      this.params.annualTurnover = this.listQuery.titleAnnualTurnover
+      this.params.regCapital = this.listQuery.titleRegCapital
+      this.params.haveOfficeEmail = this.listQuery.titleHaveOfficeEmail
       exportContacts(this.params).then(response => {
         this.handleDownload(response.data)
         this.listLoading = false
@@ -739,8 +832,8 @@ export default {
     },
     handleDownload(params) {
       import('@/vendor/Export2Excel').then(excel => {
-        const tHeader = ['姓名', '性别', '部门', '职务', '职务类别', '区号', '电话', '分机号', '区号2', '电话2', '分机号2', '手机号', '手机号2', '公司名称', '关键字', '省份', '城市', '地址', '邮编', '行业', '行业(新)', '细分行业', '企业性质', '公司人数', 'PC数量', '年营业额', '传真1', '传真2', '数据日期', '来源人', '数据来源', '状态', '邮箱1', '邮箱2', '备注']
-        const filterVal = ['realName', 'realSex', 'department', 'job', 'jobCategory', 'areaCode', 'telephone', 'extensionNumber', 'areaCode2', 'telephone2', 'extensionNumber2', 'phone', 'phone2', 'companyName', 'keywords', 'province', 'city', 'address', 'postCode', 'industry', 'industryNew', 'industryDetail', 'companyNature', 'companyPersonNumber', 'pcNumber', 'annualTurnover', 'fax1', 'fax2', 'dataTime', 'fromPerson', 'dataFrom', 'dataStatus', 'email1', 'email2', 'remark']
+        const tHeader = ['姓名', '性别', '部门', '职务', '职务类别', '区号', '电话', '分机号', '区号2', '电话2', '分机号2', '手机号', '手机号2', '公司名称', '关键字', '省份', '城市', '地址', '邮编', '行业', '行业(新)', '细分行业', '企业性质', '公司人数', 'PC数量', '年营业额', '传真1', '传真2', '数据日期', '来源人', '数据来源', '状态', '邮箱1', '邮箱2', '备注', '是否AI行业', '企业邮箱', '数据更新时间', '注册资本']
+        const filterVal = ['realName', 'realSex', 'department', 'job', 'jobCategory', 'areaCode', 'telephone', 'extensionNumber', 'areaCode2', 'telephone2', 'extensionNumber2', 'phone', 'phone2', 'companyName', 'keywords', 'province', 'city', 'address', 'postCode', 'industry', 'industryNew', 'industryDetail', 'companyNature', 'companyPersonNumber', 'pcNumber', 'annualTurnover', 'fax1', 'fax2', 'dataTime', 'fromPerson', 'dataFrom', 'dataStatus', 'email1', 'email2', 'remark', 'industryAi', 'officeEmail', 'updateTime', 'regCapital']
         const list = params
         const data = this.formatJson(filterVal, list)
         excel.export_json_to_excel({
