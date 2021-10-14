@@ -193,7 +193,7 @@ export default {
       })
     },
     handleOffice() {
-      window.location.href = 'http://www.beian.miit.gov.cn/'
+      window.location.href = 'https://beian.miit.gov.cn/'
     },
     getOtherQuery(query) {
       return Object.keys(query).reduce((acc, cur) => {
